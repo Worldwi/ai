@@ -1,0 +1,78 @@
+<html>
+<head>
+  <title>Farm Product Marketplace</title>
+</head>
+<body>
+  <h1>Welcome to the Farm Product Marketplace</h1>
+  <p>Here, you can browse and purchase fresh, locally-grown farm products from your community.</p>
+
+  <h2>Featured Products:</h2>
+  <div id="featured-products">
+    <!-- This section will be populated with product listings using JavaScript -->
+<script>
+// Fetch product listings from the server
+fetch('/api/products')
+  .then(response => response.json())
+  .then(products => {
+    // Loop through the array of products and add them to the page
+    products.forEach(product => {
+      const productElement = document.createElement('div');
+      productElement.innerHTML = `
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
+        <p>Price: ${product.price}</p>
+      `;
+      document.getElementById('featured-products').appendChild(productElement);
+    });
+  });
+
+// Add event listener to the form to submit a new product
+document.getElementById('product-form').addEventListener('submit', event => {
+  event.preventDefault();
+  const product = {
+    name: document.getElementById('product-name').value,
+    description: document.getElementById('product-description').value,
+    price: document.getElementById('product-price').value
+  };
+  // Send the new product to the server to be saved
+  fetch('/api/products', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(product)
+  });
+});
+
+</script>
+  </div>
+<style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+#featured-products {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#featured-products > div {
+  width: 30%;
+  margin: 1%;
+  border: 1px solid #ccc;
+ 
+
+</style>
+  <h2>Sell Your Own Products</h2>
+  <p>If you are a farmer or producer, you can list your own products for sale on the marketplace:</p>
+  <form id="product-form">
+    <label for="product-name">Product Name:</label><br>
+    <input type="text" id="product-name" name="product-name"><br>
+    <label for="product-description">Product Description:</label><br>
+    <textarea id="product-description" name="product-description"></textarea><br>
+    <label for="product-price">Price:</label><br>
+    <input type="number" id="product-price" name="product-price"><br><br>
+    <input type="submit" value="Submit">
+  </form> 
+</body>
+</html>
